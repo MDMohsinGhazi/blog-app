@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import { categories } from '@/constant';
 import { toast } from 'react-hot-toast';
 import dynamic from 'next/dynamic';
-import { ImageUpload } from '@/components';
 import { useRouter } from 'next/navigation';
 
 const Editor = dynamic(() => import('../../components/editor/Editor'), { ssr: false });
 const Select = dynamic(() => import('../../components/dropdown/Select'), { ssr: false });
+const ImageUpload = dynamic(() => import('../../components/fileUpload/ImageUpload'), { ssr: false });
 
 const Write = () => {
     const router = useRouter();
