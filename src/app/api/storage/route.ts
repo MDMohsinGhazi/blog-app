@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import UploadService from '@/services/storageService';
+import { APIErrorHandler } from '@/lib/handlers/ErrorHandle';
 
 export async function POST(req: Request) {
     try {
@@ -32,7 +33,12 @@ export async function DELETE(req: Request) {
 
         return NextResponse.json({ imageUrl });
     } catch (error) {
-        console.error('Error uploading file:', error);
-        return NextResponse.json({ error: 'Failed to delete file' }, { status: 500 });
+        const errorObject = new APIErrorHandler(error as any);
+
+        return NextResponse.json({
+            code: errorObject.getErrorCode,
+            message: errorObject.getErrorMessage,
+            details: errorObject.getErrorDetails,
+        });
     }
 }

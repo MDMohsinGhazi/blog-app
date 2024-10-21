@@ -2,7 +2,13 @@ import NextAuth from 'next-auth';
 import { FirestoreAdapter } from '@auth/firebase-adapter';
 import { firestoreAdmin } from '@/lib/firebaseAdmin';
 import providers from './auth.config';
-export const { handlers, auth, signIn, signOut } = NextAuth({
+
+export const {
+    handlers: { GET, POST },
+    auth,
+    signIn,
+    signOut,
+} = NextAuth({
     providers,
     adapter: FirestoreAdapter(firestoreAdmin),
     secret: process.env.NEXTAUTH_SECRET,
@@ -24,6 +30,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
             throw new Error('Email not verified or unsupported provider');
         },
+
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id?.toString();
@@ -33,18 +40,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             return token;
         },
 
-        async session({ session, user }) {
-            if (user) {
-                session.user.id = user.id;
-                session.user.username = user.username;
-                session.user.image = user.image;
+        async session({ session, token }) {
+            if (token) {
+                session.user.id = token.id as string;
+                session.user.username = token.username;
+                session.user.image = token.picture;
             }
             return session;
         },
     },
 
     pages: {
-        signIn: '/auth/log-in',
+        signIn: '/auth/login',
         error: '/auth/error',
         newUser: '/auth/register',
     },

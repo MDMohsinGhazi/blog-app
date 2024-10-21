@@ -2,27 +2,25 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { signIn } from 'next-auth/react';
-import { PopupSignin } from '../../../hooks';
+import toast from 'react-hot-toast';
+import { login } from '@/lib/actions/auth';
 
-const SignIn = () => {
+const LogIn = () => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
+        const body = { email, password };
 
-        const res = await signIn('credentials', {
-            redirect: true,
-            email,
-            password,
-        });
+        const res = await fetch('/api/user/signin', { method: 'POST', body: JSON.stringify(body) });
 
-        if (res?.error) {
-            console.error('Sign-in error:', res.error);
-        } else {
-            console.log('Signed in successfully');
+        if (res.ok) {
+            return alert('login successfull');
         }
+
+        const a = await res.json();
+        toast.error(a.message);
     };
 
     return (
@@ -66,13 +64,20 @@ const SignIn = () => {
             <div className="center-line">or</div>
             <button
                 className="flex items-center justify-center  gap-2 px-4 py-2  bg-primary rounded-full text-lightGray shadow-sm shadow-lightGray hover:shadow-lg"
-                onClick={() => PopupSignin('/google-signin', 'Google sign in')}
+                onClick={() => login('google')}
             >
                 <p className="text-nowrap">Login with</p>
                 <Image src={'/icons/Google.svg'} height={16} width={16} alt="google" />
+            </button>
+            <button
+                onClick={() => login('github')}
+                className="flex items-center justify-center  gap-2 px-4 py-2  bg-primary rounded-full text-lightGray shadow-sm shadow-lightGray hover:shadow-lg"
+            >
+                <p className="text-nowrap">Login with</p>
+                <Image src={'/icons/GitHub.svg'} height={20} width={20} alt="google" />
             </button>
         </div>
     );
 };
 
-export default SignIn;
+export default LogIn;

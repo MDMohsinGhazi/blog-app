@@ -1,3 +1,4 @@
+import { APIErrorHandler } from '@/lib/handlers/ErrorHandle';
 import PostService from '@/services/postService';
 import { NextResponse } from 'next/server';
 
@@ -6,8 +7,16 @@ export async function GET() {
         const posts = await PostService.getPosts();
         return NextResponse.json(posts, { status: 200 });
     } catch (error) {
-        console.error('Error fetching posts:', error);
-        return NextResponse.json({ message: 'Error fetching posts' }, { status: 500 });
+        const errorObject = new APIErrorHandler(error as any);
+
+        return NextResponse.json(
+            {
+                code: errorObject.getErrorCode,
+                message: errorObject.getErrorMessage,
+                details: errorObject.getErrorDetails,
+            },
+            { status: Number(errorObject.getErrorCode) }
+        );
     }
 }
 
@@ -36,7 +45,12 @@ export async function POST(req: Request) {
         const post = await PostService.createPost({ title, content, textContent, category, imageUrl });
         return NextResponse.json(post, { status: 201 });
     } catch (error) {
-        console.error('Error creating posts:', error);
-        return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+        const errorObject = new APIErrorHandler(error as any);
+
+        return NextResponse.json({
+            code: errorObject.getErrorCode,
+            message: errorObject.getErrorMessage,
+            details: errorObject.getErrorDetails,
+        });
     }
 }

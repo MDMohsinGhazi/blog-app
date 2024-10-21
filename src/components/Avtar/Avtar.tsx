@@ -1,16 +1,21 @@
 'use client';
 import React from 'react';
 import { useSession } from 'next-auth/react';
-import LogoutButton from './LogoutButton';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Write } from '@/app/assets';
+import { Logout, Write } from '@/app/assets';
+import { logOut } from '@/lib/actions/auth';
 
 const Avtar = () => {
-    const { data: session } = useSession();
+    const { data: session, update: updateSession } = useSession();
     const pathname = usePathname();
     const isWriteing = pathname.startsWith('/write');
+
+    const logOutHandle = async () => {
+        await logOut();
+        updateSession();
+    };
 
     if (session) {
         return (
@@ -29,7 +34,13 @@ const Avtar = () => {
                     <ul className="absolute -translate-y-44 flex flex-col  mt-2 bg-white border rounded shadow-lg opacity-0 transition-all duration-200 peer-hover:opacity-100 hover:opacity-100 peer-hover:translate-y-0 hover:translate-y-0">
                         <li className="py-2 px-4 left-0 hover:bg-gray-200">{session.user?.name}</li>
                         <li className="py-2 px-4 left-0 hover:bg-gray-200">{session.user?.email}</li>
-                        <LogoutButton />
+                        <button
+                            className="flex flex-1 gap-2 items-center px-4 py-2 hover:bg-gray-200"
+                            onClick={logOutHandle}
+                        >
+                            <p className="text-nowrap">Logout</p>
+                            <Image src={Logout} height={16} width={16} alt="google" />
+                        </button>
                     </ul>
                 </div>
             </div>
@@ -39,7 +50,7 @@ const Avtar = () => {
     return (
         <Link
             className="bg-primary px-4 py-1 text-gray-300 shadow-sm rounded-full hover:shadow-md hover:text-gray-100"
-            href={'/auth/log-in'}
+            href={'/auth/login'}
         >
             Login
         </Link>
