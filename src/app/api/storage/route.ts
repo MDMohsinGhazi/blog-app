@@ -24,7 +24,7 @@ export async function DELETE(req: Request) {
     try {
         const { searchParams } = new URL(req.url);
         const imageURL = searchParams.get('imageURL');
-        console.log({ imageURL });
+
         if (!imageURL) {
             return NextResponse.json({ error: 'No image url is required' }, { status: 400 });
         }

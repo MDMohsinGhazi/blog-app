@@ -1,10 +1,4 @@
-import { Google, Github, Home, Catagery, Message } from '@/app/assets';
-
-export const navItem = [
-    { title: 'Home', path: '/', img: Home },
-    { title: 'Blog', path: '/blog', img: Catagery },
-    { title: 'Contact us', path: '/contact', img: Message },
-];
+import { Google, Github } from '@/app/assets';
 
 export const loginWith = [
     { entity: 'google', src: Google },

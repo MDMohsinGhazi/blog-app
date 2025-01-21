@@ -8,7 +8,12 @@ export const login = async (provider: string) => {
     revalidatePath('/');
 };
 
+export const loginWithCreds = async (email: string, password: string) => {
+    await signIn('credentials', { redirectTo: '/', email, password });
+    revalidatePath('/');
+};
+
 export const logOut = async () => {
     await signOut({ redirectTo: '/' });
-    revalidatePath('/');
+    revalidatePath('/auth/login');
 };

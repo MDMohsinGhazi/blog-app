@@ -6,3 +6,6 @@ export { default as Editor } from './editor/Editor';
 export { default as ImageUpload } from './fileUpload/ImageUpload';
 export { default as Select } from './dropdown/Select';
 export { default as ContentDisplay } from './contentDisplay/ContentDisplay';
+export { default as ContactForm } from './form/ContactForm';
+export { default as SWRprovider } from './swrProvider/SWRprovider';
+export { default as Carousel } from './carousel/Carousel';

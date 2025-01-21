@@ -8,5 +8,6 @@ const Write = 'icons/Write.svg';
 const Catagery = 'icons/Category.svg';
 const Home = 'icons/Home.svg';
 const Message = 'icons/Message.svg';
+const Email = 'icons/Email.svg';
 
-export { Logo, Google, Github, Mail, Profile, Logout, Write, Catagery, Home, Message };
+export { Logo, Google, Github, Mail, Profile, Logout, Write, Catagery, Home, Message, Email };

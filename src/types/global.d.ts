@@ -12,6 +12,8 @@ declare global {
         authorId: string;
         imageUrl?: string;
         textContent?: string;
+        createdAt?: string;
+        auther?: string;
     }
     interface SelectOption {
         label: string;

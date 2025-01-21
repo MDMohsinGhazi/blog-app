@@ -1,16 +1,16 @@
-import { NextResponse } from 'next/server';
-import UsersServise from '@/services/userService';
 import { APIErrorHandler } from '@/lib/handlers/ErrorHandle';
+import PostService from '@/services/postService';
+import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get('category');
     try {
-        const body = await req.json();
-        const { email, password } = body;
-        if (email && password) {
-            const user = await UsersServise.getUser(body.email, body.password);
-            return NextResponse.json(user);
+        if (!category) {
+            return NextResponse.json({ error: 'No category found' }, { status: 400 });
         } else {
-            return NextResponse.json({ error: 'Email and password is required' }, { status: 400 });
+            const posts = await PostService.getPostByCategory(category);
+            return NextResponse.json(posts, { status: 200 });
         }
     } catch (error) {
         const errorObject = new APIErrorHandler(error as any);

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
-import { login } from '@/lib/actions/auth';
+import { login, loginWithCreds } from '@/lib/actions/auth';
 
 const LogIn = () => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -11,16 +11,16 @@ const LogIn = () => {
         const formData = new FormData(event.currentTarget);
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
-        const body = { email, password };
 
-        const res = await fetch('/api/user/signin', { method: 'POST', body: JSON.stringify(body) });
+        const promise = new Promise((resolve, reject) => {
+            loginWithCreds(email, password).then(resolve).catch(reject);
+        });
 
-        if (res.ok) {
-            return alert('login successfull');
-        }
-
-        const a = await res.json();
-        toast.error(a.message);
+        toast.promise(promise, {
+            loading: 'Login in...',
+            success: 'Logged in successfully!',
+            error: 'Failed to log in',
+        });
     };
 
     return (

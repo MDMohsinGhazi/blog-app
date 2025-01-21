@@ -5,14 +5,14 @@ import useSWR from 'swr';
 import toast from 'react-hot-toast';
 import Card from '@/components/card/Card';
 import Loading from './loading';
+import { Carousel } from '@/components';
 
-const fetcher = (url: string) => fetch(url, { method: 'GET' }).then((res) => res.json());
 const Home = () => {
     const {
         data: posts,
         isLoading,
         error,
-    } = useSWR('/api/blog', fetcher, {
+    } = useSWR('/api/blog', {
         onError: (error) => {
             toast.error(error);
         },
@@ -23,12 +23,21 @@ const Home = () => {
     }
 
     return (
-        <div className="flex gap-8 flex-wrap">
-            {posts.map((post: Post) => (
-                <div>
-                    <Card key={post.title} title={post.title} textContent={post.textContent} imageUrl={post.imageUrl} />
-                </div>
-            ))}
+        <div className="flex flex-col gap-6 p-8 my-6 shadow-md custom-min-hight">
+            <Carousel posts={posts?.slice(0, 11)} />
+            <div className="flex gap-8 flex-wrap">
+                {posts.map((post: Post) => (
+                    <div>
+                        <Card
+                            key={post.id}
+                            id={post.id}
+                            title={post.title}
+                            textContent={post.textContent}
+                            imageUrl={post.imageUrl}
+                        />
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

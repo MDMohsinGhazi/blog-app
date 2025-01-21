@@ -1,4 +1,4 @@
-import { getDocs, query, where, collection } from 'firebase/firestore';
+import { getDocs, query, where, collection, addDoc } from 'firebase/firestore';
 import { firestore } from '@/lib/firebase';
 
 class UserService {
@@ -30,17 +30,25 @@ class UserService {
     }
 
     // Method to register a new user
-    async register(email: string, password: string) {
+    async register(name: string, email: string, password: string) {
         try {
-            if (!email || !password) {
-                return { message: 'Email and password are required' };
-            }
-            const user = { name: 'mohsin', password: 'kjhh', id: 'kijj' };
+            const q = query(this.usersCollection, where('email', '==', email));
+            const querySnapshot = await getDocs(q);
 
-            return { message: 'User registered successfully', id: user.id };
+            if (!querySnapshot.empty) {
+                throw new Error('user already exist.');
+            }
+
+            const docRef = await addDoc(this.usersCollection, {
+                name,
+                email,
+                password,
+                createdAt: new Date(),
+            });
+            return { id: docRef.id };
         } catch (error) {
-            console.error('Error signing up:', error);
-            return { message: 'Error registering user', error: error };
+            console.error('Error registring user:', error);
+            throw new Error('Failed to create user');
         }
     }
 }

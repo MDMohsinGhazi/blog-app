@@ -33,7 +33,7 @@ const ImageUploader: React.FC<PropsInterface> = ({ image, setImage }) => {
                 setImage(data.imageUrl);
                 setIsUploading(false);
             } catch (error) {
-                alert('Failed to upload image. Please try again.');
+                toast.error('Failed to upload image. Please try again.');
                 console.error(error);
                 setIsUploading(false);
             }

@@ -1,19 +1,27 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import PostService from '@/services/postService';
+import { APIErrorHandler } from '@/lib/handlers/ErrorHandle';
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    const { id } = req.query;
+interface Params {
+    params: { id: string };
+}
 
-    if (req.method === 'PUT') {
-        const { title, content } = req.body;
-        const updatedPost = await PostService.updatePost(id as string, title, content);
-        return res.status(200).json(updatedPost);
-    } else if (req.method === 'DELETE') {
-        const deletedPost = await PostService.deletePost(id as string);
-        return res.status(200).json(deletedPost);
-    } else {
-        return res.status(405).end(`Method ${req.method} Not Allowed`);
+export async function GET(req: any, { params }: Params) {
+    const { id } = params;
+
+    try {
+        const post = await PostService.getPostById(id);
+        return NextResponse.json(post, { status: 200 });
+    } catch (error) {
+        const errorObject = new APIErrorHandler(error as any);
+
+        return NextResponse.json(
+            {
+                code: errorObject.getErrorCode,
+                message: errorObject.getErrorMessage,
+                details: errorObject.getErrorDetails,
+            },
+            { status: Number(errorObject.getErrorCode) }
+        );
     }
-};
-
-export default handler;
+}
