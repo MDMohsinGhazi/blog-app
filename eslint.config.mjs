@@ -1,15 +1,15 @@
-import globals from 'globals'
-import pluginJs from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import prettier from 'eslint-plugin-prettier'
-import security from 'eslint-plugin-security'
-import parser from '@typescript-eslint/parser'
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import prettier from 'eslint-plugin-prettier';
+import security from 'eslint-plugin-security';
+import parser from '@typescript-eslint/parser';
 
 export default [
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
     {
-        files: ['src/**/*.ts'],
+        files: ['src/**/*.ts', 'src/**/*.tsx'],
         languageOptions: {
             globals: globals.browser,
             parser: parser,
@@ -33,4 +33,4 @@ export default [
         },
         ignores: ['node_modules/*', '.git/', '.next'],
     },
-]
+];
