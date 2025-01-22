@@ -5,9 +5,11 @@ import useSWR from 'swr';
 import toast from 'react-hot-toast';
 import Card from '@/components/card/Card';
 import Loading from './loading';
-import { Carousel } from '@/components';
+import dynamic from 'next/dynamic';
 
-const Home = () => {
+const Carousel = dynamic(() => import('@/components/carousel/Carousel'), { ssr: false });
+
+const Page = () => {
     const {
         data: posts,
         isLoading,
@@ -42,4 +44,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Page;
