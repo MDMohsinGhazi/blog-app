@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Catagery, Home, Logo, Message } from '@/app/assets';
-import Avtar from '../avtar/Avtar';
+import Aavtar from '../avatar/Avatar';
 import { categories } from '@/constant';
 
 const Header = () => {
@@ -44,7 +44,7 @@ const Header = () => {
                         <span>{'Contact us'}</span>
                     </Link>
                 </ul>
-                <Avtar />
+                <Aavtar />
             </div>
         </nav>
     );
