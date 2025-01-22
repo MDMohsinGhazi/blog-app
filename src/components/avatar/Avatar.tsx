@@ -8,7 +8,7 @@ import { Logout, Write } from '@/app/assets';
 import { logOut } from '@/lib/actions/auth';
 import toast from 'react-hot-toast';
 
-const Avtar = () => {
+const Avatar = () => {
     const { data: session, update: updateSession, status } = useSession();
     const pathname = usePathname();
     const isWriteing = pathname.startsWith('/write');
@@ -74,4 +74,4 @@ const Avtar = () => {
     );
 };
 
-export default Avtar;
+export default Avatar;
